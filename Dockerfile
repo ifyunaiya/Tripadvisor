@@ -13,13 +13,13 @@ COPY mvnw pom.xml ./
 RUN chmod +x mvnw
 
 # Pre-download dependencies
-RUN ./mvnw dependency:go-offline -B
+RUN ./mvn dependency:go-offline -B
 
 # Copy source code
 COPY src ./src
 
 # Build the Spring Boot JAR (skip tests for faster build)
-RUN ./mvnw package -DskipTests -B
+RUN ./mvn package -DskipTests -B
 
 # ============================
 #   STEP 2 — Run the JAR
