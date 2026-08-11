@@ -1,7 +1,12 @@
+FROM ubuntu:latest
+LABEL authors="nwank"
+
+ENTRYPOINT ["top", "-b"]
+
 # ============================
 #   STEP 1 — Build the JAR
 # ============================
-FROM eclipse-temurin:17-jdk-alpine AS builder
+FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /app
 
@@ -13,18 +18,18 @@ COPY mvnw pom.xml ./
 RUN chmod +x mvnw
 
 # Pre-download dependencies
-RUN ./mvn dependency:go-offline -B
+RUN ./mvnw dependency:go-offline -B
 
 # Copy source code
 COPY src ./src
 
 # Build the Spring Boot JAR (skip tests for faster build)
-RUN ./mvn package -DskipTests -B
+RUN ./mvnw package -DskipTests -B
 
 # ============================
 #   STEP 2 — Run the JAR
 # ============================
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:21-jdk-alpine
 
 WORKDIR /app
 
